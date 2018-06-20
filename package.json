@@ -4,7 +4,7 @@
   "description": "traversy example",
   "main": "app.js",
   "scripts": {
-    "start": "node app"
+    "start": "node app.js"
   },
   "author": "pratikmaniya",
   "license": "ISC",
