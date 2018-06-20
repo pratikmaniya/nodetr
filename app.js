@@ -8,6 +8,8 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const config = require('./config/database');
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
+    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0'
 
 mongoose.connect(config.database);
 let db = mongoose.connection;
@@ -96,6 +98,5 @@ let users = require('./routes/users');
 app.use('/articles', articles);
 app.use('/users', users);
 
-app.listen(3000, function() {
-    console.log('app is listening on 3000...')
-});
+app.listen(port, ip);
+console.log('Server running on http://%s:%s', ip, port);
