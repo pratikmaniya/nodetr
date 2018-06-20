@@ -1,4 +1,4 @@
 module.exports = {
-    database: 'mongodb://admin:admin7871@ds161700.mlab.com:61700/hometree',
+    database: 'process.env.MONGOLAB_URI',
     secret: 'yoursecret'
 }
