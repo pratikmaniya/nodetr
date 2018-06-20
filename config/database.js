@@ -1,4 +1,4 @@
 module.exports = {
-    database: 'mongodb://localhost:27017/hometree',
+    database: 'mongodb://admin:admin7871@ds161700.mlab.com:61700/hometree',
     secret: 'yoursecret'
 }
