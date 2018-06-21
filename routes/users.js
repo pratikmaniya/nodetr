@@ -9,7 +9,7 @@ app.get('/register', function(req, res) {
     res.render('register');
 });
 
-app.post('/register', function(req, res) {
+app.post('/register', function(req, res, next) {
     const name = req.body.name;
     const email = req.body.email;
     const username = req.body.username;
@@ -38,23 +38,39 @@ app.post('/register', function(req, res) {
             password:password
         });
 
-        bcrypt.genSalt(10, function(err, salt) {
-            bcrypt.hash(newUser.password, salt, function(err, hash) {
-                if(err){
-                    console.log(err);
-                }
-                newUser.password = hash;
-                newUser.save(function(err) {
-                    if(err) {
-                        console.log(err);
-                        return;
+        User.find({email:newUser.email}, function(err, email) {
+            if(email.length){
+                req.flash('danger', 'Email is already registered!');
+                res.redirect('/users/register');
+            }
+            else{
+                User.find({username:newUser.username}, function(err, user) {
+                    if(user.length){
+                        req.flash('danger', 'Sorry, username is already taken try different one please!');
+                        res.redirect('/users/register');
                     }
-                    else {
-                        req.flash('success', 'You are now registered and can login');
-                        res.redirect('/users/login');
+                    else{
+                        bcrypt.genSalt(10, function(err, salt) {
+                            bcrypt.hash(newUser.password, salt, function(err, hash) {
+                                if(err){
+                                    console.log(err);
+                                }
+                                newUser.password = hash;
+                                newUser.save(function(err) {
+                                    if(err) {
+                                        console.log(err);
+                                        return;
+                                    }
+                                    else {
+                                        req.flash('success', 'You are now registered and can login!');
+                                        res.redirect('/users/login');
+                                    }
+                                });            
+                            });
+                        });
                     }
-                });            
-            });
+                });
+            }
         });
     }
 });
