@@ -6,3 +6,10 @@ block content
         each article, i in articles
             li.list-group-item
                 a(href='/articles/'+article._id)= article.title 
+    hr
+    p 
+        | Website visited 
+        b
+            font(color='red') #{counter}
+        |  times since 22,june 2018!
+    

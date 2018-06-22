@@ -2,11 +2,14 @@ const express = require('express');
 const app = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const db = require('../app');
 
 let User = require('../models/users');
 
 app.get('/register', function(req, res) {
-    res.render('register');
+    res.render('register', {
+        counter: db.counter
+    });
 });
 
 app.post('/register', function(req, res, next) {
@@ -76,7 +79,9 @@ app.post('/register', function(req, res, next) {
 });
 
 app.get('/login', function(req, res) {
-    res.render('login');
+    res.render('login', {
+        counter: db.counter
+    });
 });
 
 app.post('/login', function(req, res, next) {

@@ -1,12 +1,14 @@
 const express = require('express');
 const app = express.Router();
+const db = require('../app');
 
 let Article = require('../models/article');
 let User = require('../models/users');
 
 app.get('/add', ensureAuthenticated, function(req, res) {
     res.render('addArticle', {
-        title: 'Add Articles'
+        title: 'Add Articles',
+        counter: db.counter
     });
 });
 
@@ -46,7 +48,8 @@ app.get('/:id', function(req, res) {
         User.findById(article.author, function(err, user) {
             res.render('article', {
                 article:article,
-                author:user.name
+                author:user.name,
+                counter: db.counter
             });
         });
     });
@@ -61,7 +64,8 @@ app.get('/edit/:id', ensureAuthenticated, function(req, res) {
         else{
             res.render('editArticle', {
                 title : 'Edit Article',
-                article:article
+                article:article,
+                counter: db.counter
             });
         }
     });

@@ -77,7 +77,10 @@ app.get('*', function(req, res, next) {
     res.locals.user = req.user || null;
     next();
 });
-         
+
+
+let Counter = require('./models/counter');
+let counter=0;      
 
 app.get('/', function(req, res) {
     Article.find({}, function(err, articles) {
@@ -85,13 +88,26 @@ app.get('/', function(req, res) {
             console.log(err);
         }
         else{
+            Counter.findByIdAndUpdate("5b2cbec2ce608224181baf86",{ $inc: { count: 1 } },function(err){
+                if(err){
+                    console.log(err);
+                }
+            });
+            Counter.findById("5b2cbec2ce608224181baf86",function(err, counte) {
+                global.counter=counte.count;
+            });
             res.render('index', {
                 title: 'Articles',
+                counter: global.counter,
                 articles: articles
             });
         }
     });
 });
+
+module.exports = {
+    counter: counter
+}
 
 let articles = require('./routes/articles');
 let users = require('./routes/users');
