@@ -54,14 +54,6 @@ app.use(expressValidator({
     }
 }));
 
-app.get('/auth/facebook',passport.authenticate('facebook', { scope: ['email'] }));
-app.get('/auth/facebook', passport.authenticate('facebook'));
-
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { 
-    successRedirect: '/profile',
-    failureRedirect: '/login' 
-}));
-
 app.get('/main.js', function(req, res) {
     res.sendFile(path.join(__dirname, 'public', 'main.js'));
 });
@@ -110,6 +102,14 @@ app.get('*', function(req, res, next) {
     res.locals.user = req.user || null;
     next();
 });
+
+app.get('/auth/facebook',passport.authenticate('facebook', { scope: ['email'] }));
+app.get('/auth/facebook', passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { 
+    successRedirect: '/profile',
+    failureRedirect: '/login' 
+}));
 
 let articles = require('./routes/articles');
 let users = require('./routes/users');
