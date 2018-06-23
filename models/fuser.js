@@ -1,6 +1,6 @@
 let mongoose = require('mongoose');
 
-let userSchema = mongoose.Schema({
+let fuserSchema = mongoose.Schema({
     facebook:{
         id: String,
         token: String,
@@ -9,4 +9,4 @@ let userSchema = mongoose.Schema({
     }
 });
 
-const User = module.exports = mongoose.model('user', userSchema);
+const User = module.exports = mongoose.model('fuser', fuserSchema);
