@@ -8,7 +8,7 @@ var configAuth = require('./auth');
 module.exports = function(passport) {
     passport.use(new LocalStrategy(function(username, password, done){
         let query = {username:username};
-        user.findOne(query, function(err, user) {
+        User.findOne(query, function(err, user) {
             if(err) throw err;
             if(!user) {
                 return done(null, false, {message: 'No user found'});
@@ -33,13 +33,13 @@ module.exports = function(passport) {
 	  },
 	  function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function(){
-			user.findOne({'facebook.id' : profile.id}, function(err, user) {
+			User.findOne({'facebook.id' : profile.id}, function(err, user) {
 				if(err)
 					return done(err);
 				if(user)
 					return done(null, user);
 				else{
-					var newUser = new user();
+					let newUser = new User();
 					newUser.facebook.id = profile.id,
 					newUser.facebook.token = accessToken,
 					newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName,
