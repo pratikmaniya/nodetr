@@ -1,6 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
-const User = require('../models/users');
+const user = require('../models/users');
+const User = require('../models/user');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
 var configAuth = require('./auth');
@@ -8,7 +9,7 @@ var configAuth = require('./auth');
 module.exports = function(passport) {
     passport.use(new LocalStrategy(function(username, password, done){
         let query = {username:username};
-        User.findOne(query, function(err, user) {
+        user.findOne(query, function(err, user) {
             if(err) throw err;
             if(!user) {
                 return done(null, false, {message: 'No user found'});
