@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
-const user = require('../models/users');
+const User = require('../models/users');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
 var configAuth = require('./auth');
