@@ -33,7 +33,7 @@ module.exports = function(passport) {
 	  },
 	  function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function(){
-			User.findOne({'facebook.id' : profile.id}, function(err, user) {
+			user.findOne({'facebook.id' : profile.id}, function(err, user) {
 				if(err)
 					return done(err);
 				if(user)
