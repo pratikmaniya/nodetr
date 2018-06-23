@@ -82,7 +82,6 @@ app.get('/login', function(req, res) {
     res.render('login', {
         counter: db.counter
     });
-	console.log(counter);
 });
 
 app.post('/login', function(req, res, next) {
