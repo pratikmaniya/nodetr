@@ -35,7 +35,7 @@ module.exports = function(passport) {
 	  },
 	  function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function(){
-			User.findOrCreate({'facebook.id' : profile.id}, function(err, user) {
+			User.findOne({'facebook.id' : profile.id}, function(err, user) {
                 console.log(profile);
                 if(err)
 					return done(err);
