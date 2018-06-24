@@ -6,7 +6,7 @@ let Article = require('../models/article');
 let User = require('../models/users');
 
 app.get('/add', ensureAuthenticated, function(req, res) {
-    res.render('addArticle', {
+    res.render('addArticle.pug', {
         title: 'Add Articles',
         counter: db.counter
     });
@@ -46,7 +46,7 @@ app.post('/add', function(req, res) {
 app.get('/:id', function(req, res) {
     Article.findById(req.params.id, function(err, article) {
         User.findById(article.author, function(err, user) {
-            res.render('article', {
+            res.render('article.pug', {
                 article:article,
                 author:user.name,
                 counter: db.counter
@@ -62,7 +62,7 @@ app.get('/edit/:id', ensureAuthenticated, function(req, res) {
             res.redirect('/');
         }
         else{
-            res.render('editArticle', {
+            res.render('editArticle.pug', {
                 title : 'Edit Article',
                 article:article,
                 counter: db.counter

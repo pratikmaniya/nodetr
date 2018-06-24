@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express.Router();
+const app = express();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const db = require('../app');
@@ -7,7 +7,7 @@ const db = require('../app');
 let User = require('../models/users');
 
 app.get('/register', function(req, res) {
-    res.render('register', {
+    res.render('register.pug', {
         counter: db.counter
     });
 });
@@ -29,7 +29,7 @@ app.post('/register', function(req, res, next) {
     let errors = req.validationErrors();
 
     if(errors){
-        res.render('register', {
+        res.render('register.pug', {
             errors:errors
         });
     }
@@ -79,9 +79,20 @@ app.post('/register', function(req, res, next) {
 });
 
 app.get('/login', function(req, res) {
-    res.render('login', {
-        counter: db.counter
-    });
+    res.render('login.pug',);
+});
+
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/users/login');
+}
+
+app.set('view engine', 'ejs');
+app.get('/profile', isLoggedIn, function(req, res){
+    res.render('../views/profile.ejs', {user: req.user});
+    console.log(req.user);
 });
 
 app.post('/login', function(req, res, next) {
@@ -95,7 +106,7 @@ app.post('/login', function(req, res, next) {
 app.get('/logout', function(req, res) {
     req.logout();
     req.flash('success', 'You are logged out');
-    res.redirect('/users/login');
+    res.redirect('/users/login.pug');
 });
 
 module.exports = app;
