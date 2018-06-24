@@ -35,7 +35,8 @@ module.exports = function(passport) {
 	  function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function(){
 			User.findOne({'facebook.id' : profile.id}, function(err, user) {
-				if(err)
+                console.log(profile);
+                if(err)
 					return done(err);
 				if(user)
 					return done(null, user);
@@ -50,7 +51,6 @@ module.exports = function(passport) {
 							throw err;
 						return done(null, newUser);
 					});
-					console.log(profile);
 				}
 			});
 		});
