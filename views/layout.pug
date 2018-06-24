@@ -1,9 +1,13 @@
 doctype html
 html   
     head    
-        title homepage
+        title Modasa
+        link(rel='icon', href='../public/nodetr.ico', type='image/x-icon')
         link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
         link(rel='stylesheet' href='/style.css')
+        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css')
+        
+
     body
         nav.navbar.navbar-inverse
             .container
@@ -25,9 +29,9 @@ html
                                 a(href='/users/logout') Logout
                         else
                             li
-                                a(href='/users/register') Register
+                                a(href='/users/register', id='registerbtn') Register
                             li
-                                a(href='/users/login') Login
+                                a(href='/users/login', id='loginbtn') Login
         .container
             != messages('message', locals)
             if errors   

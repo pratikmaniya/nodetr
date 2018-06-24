@@ -1,7 +1,7 @@
 module.exports = {
-    'facebookAuth' : {
-        'clientId' : '251935238901580',
-        'clientSecret' : '25bdc2c1c6bf13f2f7e3fe1054360f56',
-        'callbackURL' : 'https://modasa.herokuapp.com/auth/facebook/callback'
+    'googleAuth' : {
+        'clientId' : '592734537574-q2nnderds81nee7qp7cf18dph95gt8m8.apps.googleusercontent.com',
+        'clientSecret' : 'Thj-5kU4WwvUiWZcNTP6UD7x',
+        'callbackURL' : 'https://modasa.herokuapp.com/auth/google/callback'
     }
 }

@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Node Authentication</title>
+	<title>Login</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
@@ -14,7 +14,8 @@
 
 	<div class="page-header text-center">
 		<h1><span class="fa fa-anchor"></span> Profile Page</h1>
-		<a href="/logout" class="btn btn-default btn-sm">Logout</a>
+		<a href="/" class="btn btn-default btn-sm">Home</a>
+		<a href="/users/logout" class="btn btn-default btn-sm">Logout</a>
 	</div>
 
 	<div class="row">
@@ -25,27 +26,25 @@
 				<h3><span class="fa fa-user"></span> Local</h3>
 
 					<p>
-						<strong>id</strong>: <%= user._id %><br>
-						<strong>email</strong>: <%= user.username %><br>
-						<strong>password</strong>: <%= user.password %>
+						<strong>name</strong>: <%= user.name %><br>
+						<strong>username</strong>: <%= user.username %><br>
+						<strong>email</strong>: <%= user.email %>
 					</p>
 
 			</div>
 		</div>
-		
-		<!-- FACEBOOK INFORMATION -->
-		<div class="col-sm-6">
-			<div class="well">
-				<h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
-	
-				<p>
-					<strong>id</strong>: <%= user.facebook.id %><br>
-					<strong>token</strong>: <%= user.facebook.token %><br>
-					<strong>email</strong>: <%= user.facebook.email %><br>
-					<strong>name</strong>: <%= user.facebook.name %>
-				</p>
-	
-			</div>
+
+		<!-- GOOGLE INFORMATION -->
+        <div class="col-sm-6">
+            <div class="well">
+                <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google</h3>
+
+                <p>
+					<strong>name</strong>: <%= user.google.name %><br>
+                    <strong>email</strong>: <%= user.google.email %>
+                </p>
+
+            </div>
 		</div>
 	</div>
 </div>

@@ -34,14 +34,12 @@ app.post('/register', function(req, res, next) {
         });
     }
     else{
-        let newUser = new User({
-            name:name,
-            email:email,
-            username:username,
-            password:password
-        });
-
-        User.find({email:newUser.email}, function(err, email) {
+        let newUser = new User();
+                            newUser.name = name;
+                            newUser.email = email;
+                            newUser.username = username;
+                            newUser.password = password;
+        User.find({email : newUser.email}, function(err, email) {
             if(email.length){
                 req.flash('danger', 'Email is already registered!');
                 res.redirect('/users/register');
@@ -82,22 +80,9 @@ app.get('/login', function(req, res) {
     res.render('login.pug',);
 });
 
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect('/users/login');
-}
-
-app.set('view engine', 'ejs');
-app.get('/profile', isLoggedIn, function(req, res){
-    res.render('../views/profile.ejs', {user: req.user});
-    console.log(req.user);
-});
-
 app.post('/login', function(req, res, next) {
     passport.authenticate('local', {
-        successRedirect: '/',
+        successRedirect: '/profile',
         failureRedirect: '/users/login',
         failureFlash: true
     })(req, res, next);
@@ -106,7 +91,7 @@ app.post('/login', function(req, res, next) {
 app.get('/logout', function(req, res) {
     req.logout();
     req.flash('success', 'You are logged out');
-    res.redirect('/users/login.pug');
+    res.redirect('/users/login');
 });
 
 module.exports = app;

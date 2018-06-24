@@ -7,8 +7,7 @@ let User = require('../models/users');
 
 app.get('/add', ensureAuthenticated, function(req, res) {
     res.render('addArticle.pug', {
-        title: 'Add Articles',
-        counter: db.counter
+        title: 'Add Articles'
     });
 });
 

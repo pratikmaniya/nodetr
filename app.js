@@ -89,7 +89,7 @@ app.get('/', function(req, res) {
             Counter.findById("5b2cbec2ce608224181baf86",function(err, counte) {
                 global.counter=counte.count;
             });
-            res.render('index', {
+            res.render('index.pug', {
                 title: 'Articles',
                 counter: global.counter,
                 articles: articles
@@ -98,15 +98,42 @@ app.get('/', function(req, res) {
     });
 });
 
+app.get('/check-login', function (req, res) {
+    if (req.session && req.session.auth && req.session.auth.userId) {
+        pool.query('SELECT * FROM "user" WHERE id = $1', [req.session.auth.userId], function (err, result) {
+            if (err) {
+               res.status(500).send(err.toString());
+            } else {
+               res.send(result.rows[0].username);    
+            }
+        });
+    } else {
+        res.status(400).send('You are not logged in');
+    }
+ });
+
 app.get('*', function(req, res, next) {
     res.locals.user = req.user || null;
     next();
 });
 
-app.get('/auth/facebook',passport.authenticate('facebook', { scope: ['email'] }));
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/users/login');
+}
 
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { 
-    successRedirect: '/users/profile',
+app.set('view engine', 'ejs');
+app.get('/profile', isLoggedIn, function(req, res){
+    res.render('../views/profile.ejs', {user: req.user});
+    console.log(req.user);
+});
+
+app.get('/auth/google',passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get('/auth/google/callback', passport.authenticate('google', { 
+    successRedirect: '/profile',
     failureRedirect: '/register' 
 }));
 
