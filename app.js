@@ -8,8 +8,8 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const config = require('./config/database');
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
 mongoose.connect(config.database);
 let db = mongoose.connection;
@@ -67,13 +67,18 @@ let Article = require('./models/article');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+let Counter = require('./models/counter');
+let counter=0;      
+
 require('./config/passport')(passport);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-let Counter = require('./models/counter');
-let counter=0;      
+app.get('*', function(req, res, next) {
+    res.locals.user = req.user || null;
+    next();
+});
 
 app.get('/', function(req, res) {
     Article.find({}, function(err, articles) {
@@ -98,25 +103,6 @@ app.get('/', function(req, res) {
     });
 });
 
-app.get('/check-login', function (req, res) {
-    if (req.session && req.session.auth && req.session.auth.userId) {
-        pool.query('SELECT * FROM "user" WHERE id = $1', [req.session.auth.userId], function (err, result) {
-            if (err) {
-               res.status(500).send(err.toString());
-            } else {
-               res.send(result.rows[0].username);    
-            }
-        });
-    } else {
-        res.status(400).send('You are not logged in');
-    }
- });
-
-app.get('*', function(req, res, next) {
-    res.locals.user = req.user || null;
-    next();
-});
-
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()){
         return next();
@@ -127,7 +113,6 @@ function isLoggedIn(req, res, next) {
 app.set('view engine', 'ejs');
 app.get('/profile', isLoggedIn, function(req, res){
     res.render('../views/profile.ejs', {user: req.user});
-    console.log(req.user);
 });
 
 app.get('/auth/google',passport.authenticate('google', { scope: ['profile', 'email'] }));
