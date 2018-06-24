@@ -30,11 +30,12 @@ module.exports = function(passport) {
     passport.use(new FacebookStrategy({
 		clientID: configAuth.facebookAuth.clientId,
 		clientSecret: configAuth.facebookAuth.clientSecret,
-		callbackURL: configAuth.facebookAuth.callbackURL
+		callbackURL: configAuth.facebookAuth.callbackURL,
+		profileFields: ['id', 'displayName', 'name', 'email']
 	  },
 	  function(accessToken, refreshToken, profile, done) {
 		process.nextTick(function(){
-			User.findOne({'facebook.id' : profile.id}, function(err, user) {
+			User.findOrCreate({'facebook.id' : profile.id}, function(err, user) {
                 console.log(profile);
                 if(err)
 					return done(err);
