@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
@@ -22,8 +21,16 @@ db.on('error', function(err) {
     console.log(err);
 });
 
+const app = express();
+let Article = require('./models/article');
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
     secret: 'keyboard cat',
@@ -40,38 +47,21 @@ app.use(function (req, res, next) {
 app.use(expressValidator({
     errorFormatter: function(param, msg, value) {
         var namespace = param.split('.')
-        , root = namespace.shift()
+        , root    = namespace.shift()
         , formParam = root;
-
-        while(namespace.length) {
-            formParam += '[' + namespace.shift() + ']';
-        }
-        return {
-            param : formParam,
-            msg : msg,
-            value :value
-        };
+  
+      while(namespace.length) {
+        formParam += '[' + namespace.shift() + ']';
+      }
+      return {
+        param : formParam,
+        msg   : msg,
+        value : value
+      };
     }
-}));
-
-app.get('/main.js', function(req, res) {
-    res.sendFile(path.join(__dirname, 'public', 'main.js'));
-});
-
-app.get('/style.css', function(req, res) {
-    res.sendFile(path.join(__dirname, 'public', 'css', 'style.css'));
-});
-
-let Article = require('./models/article');
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-let Counter = require('./models/counter');
-let counter=0;      
+}));  
 
 require('./config/passport')(passport);
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -103,6 +93,22 @@ app.get('/', function(req, res) {
     });
 });
 
+let articles = require('./routes/articles');
+let users = require('./routes/users');
+app.use('/articles', articles);
+app.use('/users', users);
+
+app.get('/main.js', function(req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'main.js'));
+});
+
+app.get('/style.css', function(req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'css', 'style.css'));
+});
+
+let Counter = require('./models/counter');
+let counter=0;      
+
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()){
         return next();
@@ -121,11 +127,6 @@ app.get('/auth/google/callback', passport.authenticate('google', {
     successRedirect: '/profile',
     failureRedirect: '/register' 
 }));
-
-let articles = require('./routes/articles');
-let users = require('./routes/users');
-app.use('/articles', articles);
-app.use('/users', users);
 
 app.listen(port, ip);
 console.log('Server running on http://%s:%s', ip, port);

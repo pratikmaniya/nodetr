@@ -2,14 +2,11 @@ const express = require('express');
 const app = express();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-const db = require('../app');
 
 let User = require('../models/users');
 
 app.get('/register', function(req, res) {
-    res.render('register.pug', {
-        counter: db.counter
-    });
+    res.render('register.pug');
 });
 
 app.post('/register', function(req, res, next) {

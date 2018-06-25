@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express.Router();
-const db = require('../app');
 
 let Article = require('../models/article');
 let User = require('../models/users');
@@ -19,7 +18,7 @@ app.post('/add', function(req, res) {
     let errors = req.validationErrors();
 
     if(errors) {
-        res.render('addArticle', {
+        res.render('addArticle.pug', {
             title:'Add Articles',
             errors:errors
         });
@@ -33,6 +32,7 @@ app.post('/add', function(req, res) {
         article.save(function(err) {
             if(err){
                 console.log(err);
+                return;
             }
             else{
                 req.flash('success', 'Article Added!');
@@ -47,8 +47,7 @@ app.get('/:id', function(req, res) {
         User.findById(article.author, function(err, user) {
             res.render('article.pug', {
                 article:article,
-                author:user.name,
-                counter: db.counter
+                author:user.name
             });
         });
     });
@@ -63,8 +62,7 @@ app.get('/edit/:id', ensureAuthenticated, function(req, res) {
         else{
             res.render('editArticle.pug', {
                 title : 'Edit Article',
-                article:article,
-                counter: db.counter
+                article:article
             });
         }
     });
