@@ -6,15 +6,15 @@ const bcrypt = require('bcryptjs');
 var configAuth = require('./auth');
 
 module.exports = function(passport) {
-    passport.use(new LocalStrategy(function(username, password, done){
-        let query = {username:username};
+    passport.use('local-strategy', new LocalStrategy(function(username, password, done){
+        let query = {'local.username':username};
         User.findOne(query, function(err, user) {
             if(err) throw err;
             if(!user) {
                 return done(null, false, {message: 'No user found'});
             }
 
-            bcrypt.compare(password, user.password, function(err, isMatch) {
+            bcrypt.compare(password, user.local.password, function(err, isMatch) {
                 if(err) throw err;
                 if(isMatch) {
                     return done(null, user);
@@ -56,8 +56,6 @@ module.exports = function(passport) {
 		});
 	  }
 	));
-
-    
 
     passport.serializeUser(function(user, done) {
         done(null, user.id);

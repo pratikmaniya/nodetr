@@ -4,6 +4,11 @@ const app = express.Router();
 let Article = require('../models/article');
 let User = require('../models/users');
 
+app.get('*', function(req, res, next) {
+    res.locals.user = req.user || null;
+    next();
+});
+
 app.get('/add', ensureAuthenticated, function(req, res) {
     res.render('addArticle.pug', {
         title: 'Add Articles'
@@ -47,7 +52,7 @@ app.get('/:id', function(req, res) {
         User.findById(article.author, function(err, user) {
             res.render('article.pug', {
                 article:article,
-                author:user.name
+                author:user.local.name || user.google.name
             });
         });
     });

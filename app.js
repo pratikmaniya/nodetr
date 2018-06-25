@@ -109,25 +109,8 @@ app.get('/style.css', function(req, res) {
 let Counter = require('./models/counter');
 let counter=0;      
 
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect('/users/login');
-}
-
-app.set('view engine', 'ejs');
-app.get('/profile', isLoggedIn, function(req, res){
-    res.render('../views/profile.ejs', {user: req.user});
+app.listen(port, ip, function(){
+    console.log('Server running on http://%s:%s', ip, port);
 });
 
-app.get('/auth/google',passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-app.get('/auth/google/callback', passport.authenticate('google', { 
-    successRedirect: '/profile',
-    failureRedirect: '/register' 
-}));
-
-app.listen(port, ip);
-console.log('Server running on http://%s:%s', ip, port);
 module.exports = app ;
