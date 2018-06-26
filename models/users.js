@@ -19,6 +19,14 @@ let userSchema = mongoose.Schema({
             id: String,
             token: String,
             email: String,
+            name: String,
+            photo: String,
+            gender: String
+        },
+        facebook:{
+            id: String,
+            token: String,
+            email: String,
             name: String
         }
 });

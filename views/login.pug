@@ -13,10 +13,10 @@ block content
             br
         input.btn.btn-primary(type='submit', value='Submit')    
     
-        a.btn.btn-primary(href='/auth/facebook', style='margin-left:3px', disabled='')
+        a.btn.btn-primary(href='/users/auth/facebook', style='margin-left:3px')
             span.fa.fa-facebook  
             |   Login with Facebook
 
-        a.btn.btn-danger(href='/users/auth/google' style='margin-left:3px')
+        a.btn.btn-danger(style='margin-left:3px' onclick="window.open('/users/auth/google', 'newwindow', 'width=700,height=700');return false;")
             span.fa.fa-google-plus  
             |   Login with google
