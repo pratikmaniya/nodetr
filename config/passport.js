@@ -1,6 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
 const User = require('../models/users');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
@@ -81,6 +82,39 @@ module.exports = function(passport) {
 					newUser.google.gender = profile.gender,
 					newUser.google.photos = profile.photos[0].value;
 					console.log(newUser.google.birthday);
+					newUser.save(function(err){
+						if(err)
+							throw err;
+						return done(null, newUser);
+					});
+				}
+			});
+		});
+	  }
+	));
+
+	passport.use(new TwitterStrategy({
+		consumerKey: configAuth.twitterAuth.clientId,
+		consumerSecret: configAuth.twitterAuth.clientSecret,
+		callbackURL: configAuth.twitterAuth.callbackURL,
+		includeEmail: true
+	  },
+	  function(token, tokenSecret, profile, done) {
+		console.log(profile);
+		console.log(profile.emails[0].value);
+		process.nextTick(function(){
+			User.findOne({'twitter.id' : profile.id}, function(err, user) {
+				if(err)
+					return done(err);
+				if(user)
+					return done(null, user);
+				else{
+					var newUser = new User();
+					newUser.twitter.id = profile.id,
+					newUser.twitter.token = token,
+					newUser.twitter.name = profile.displayName,
+					newUser.twitter.email = profile.emails[0].value;
+					console.log(newUser.twitter.email);
 					newUser.save(function(err){
 						if(err)
 							throw err;

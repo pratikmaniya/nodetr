@@ -114,6 +114,13 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', {
     failureRedirect: '/register' 
 }));
 
+app.get('/auth/twitter',passport.authenticate('twitter'));
+
+app.get('/auth/twitter/callback', passport.authenticate('twitter', { 
+    successRedirect: '/users/profile',
+    failureRedirect: '/register' 
+}));
+
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()){
         return next();

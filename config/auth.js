@@ -8,5 +8,10 @@ module.exports = {
         'clientId':'2266591483568331',
         'clientSecret':'7eb81cd1754e2f19c84c6c8b0eee24cc',
         'callbackURL':'https://modasa.herokuapp.com/users/auth/facebook/callback'
+    },
+    'twitterAuth':{
+        'clientId':'Qt1gSeWe7uStk3kYJENpqChrD',
+        'clientSecret':'EkzppWP5hARl9eVfzbYq0TWQRifduRUY2Kpoo53c9TpIqTWI3q',
+        'callbackURL':'https://modasa.herokuapp.com/users/auth/twitter/callback'
     }
 }
