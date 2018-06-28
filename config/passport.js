@@ -9,24 +9,57 @@ const bcrypt = require('bcryptjs');
 var configAuth = require('./auth');
 
 module.exports = function(passport) {
-	passport.use('local-signin', new LocalStrategy(function(username, password, done){
-        let query = {'local.username':username};
-        User.findOne(query, function(err, user) {
-            if(err) throw err;
-            if(!user) {
-                return done(null, false, {message: 'No user found'});
-            }
+	passport.use('local-signin', new LocalStrategy({
+		passReqToCallback:true
+	}, function(req, username, password, done){
+		if(!req.user){
+			let query = {'local.username':username};
+			User.findOne(query, function(err, user) {
+				if(err) throw err;
+				if(!user) {
+					return done(null, false, {message: 'No user found'});
+				}
 
-            bcrypt.compare(password, user.local.password, function(err, isMatch) {
-                if(err) throw err;
-                if(isMatch) {
-                    return done(null, user);
-                }
-                else {
-                    return done(null, false, {message: 'Wrong password'});
-                }
-            });
-        });
+				bcrypt.compare(password, user.local.password, function(err, isMatch) {
+					if(err) throw err;
+					if(isMatch) {
+						return done(null, user);
+					}
+					else {
+						return done(null, false, {message: 'Wrong password'});
+					}
+				});
+			});
+		}
+		else{
+			let query = {'local.username':username};
+			User.findOne(query, function(err, luser) {
+				if(err) throw err;
+				if(!luser) {
+					return done(null, false, {message: 'No user found'});
+				}
+
+				bcrypt.compare(password, luser.local.password, function(err, isMatch) {
+					if(err) throw err;
+					if(!isMatch) {
+						return done(null, false, {message: 'Wrong password'});
+					}
+					else {
+						var user = req.user;
+						user.local.name = luser.local.name;
+						user.local.email = luser.local.email;
+						user.local.username = luser.local.username;
+						user.local.password = luser.local.password;
+
+						user.save(function(err){
+							if(err)
+								throw err;
+							return done(null, user);
+						});
+					}
+				});
+			});
+		}
 	}));
 	
 	passport.use(new FacebookStrategy({

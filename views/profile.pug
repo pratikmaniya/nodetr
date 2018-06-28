@@ -35,9 +35,6 @@ html
                             strong name
                             |  : #{user.local.name}
                             br
-                            strong username
-                            |  : #{user.local.username}
-                            br
                             strong email
                             |  : #{user.local.email}
                             br
@@ -80,14 +77,6 @@ html
                             br
                             strong email
                             |  : #{user.google.email}
-                            br
-                            if user.google.gender
-                                strong gender
-                                |  : #{user.google.gender}
-                                br
-                            if user.google.gender
-                                strong photo
-                                |  : #{user.google.photos}
                             br
                             br
                             a.btn.btn-primary(href='/users/unlink/google') Unlink
