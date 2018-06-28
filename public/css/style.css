@@ -7,12 +7,12 @@
 .twitterbtn{
     margin-left: 3px; 
     background-color: #55ACEE;
-    border-color: #35AEDE;
+    border-color: #159ECE;
 }
 
 .twitterbtn:hover{
     background-color: #159EBE;
-    border-color: #057EAE;
+    border-color: #158EAE;
 }
 
 .twitterbtn:focus{
