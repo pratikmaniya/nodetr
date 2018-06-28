@@ -15,6 +15,11 @@
     border-color: #057EAE;
 }
 
+.twitterbtn:focus{
+    background-color: #55ACEE;
+    border-color: #35AEDE;
+}
+
 .githubbtn{
     margin-left: 3px; 
     background-color: #444444; 
@@ -24,4 +29,9 @@
 .githubbtn:hover{ 
     background-color: #242424; 
     border-color: #141414;
+}
+
+.githubbtn:focus{ 
+    background-color: #444444; 
+    border-color: #333333;
 }
