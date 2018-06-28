@@ -3,3 +3,25 @@
     background-color: #f2dede;
     border-color: #ebccd1; 
 }
+
+.twitterbtn{
+    margin-left: 3px; 
+    background-color: #55ACEE;
+    border-color: #35AEDE;
+}
+
+.twitterbtn:hover{
+    background-color: #159EBE;
+    border-color: #057EAE;
+}
+
+.githubbtn{
+    margin-left: 3px; 
+    background-color: #444444; 
+    border-color: #333333;
+}
+
+.githubbtn:hover{ 
+    background-color: #242424; 
+    border-color: #141414;
+}
