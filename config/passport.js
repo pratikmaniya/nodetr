@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 var configAuth = require('./auth');
 
 module.exports = function(passport) {
-    passport.use('local-strategy', new LocalStrategy(function(username, password, done){
+	passport.use('local-signin', new LocalStrategy(function(username, password, done){
         let query = {'local.username':username};
         User.findOne(query, function(err, user) {
             if(err) throw err;
@@ -33,30 +33,46 @@ module.exports = function(passport) {
 		clientID: configAuth.facebookAuth.clientId,
 		clientSecret: configAuth.facebookAuth.clientSecret,
 		callbackURL: configAuth.facebookAuth.callbackURL,
-		profileFields: ['id', 'displayName', 'name', 'email']
+		profileFields: ['id', 'displayName', 'name', 'email'],
+		passReqToCallback: true
 	  },
-	  function(accessToken, refreshToken, profile, done) {
+	  function(req, accessToken, refreshToken, profile, done) {
 		console.log(profile);
 		process.nextTick(function(){
-			User.findOne({'facebook.id' : profile.id}, function(err, user) {
-				if(err)
-					return done(err);
-				if(user)
-					return done(null, user);
-				else{
-					var newUser = new User();
-					newUser.facebook.id = profile.id,
-					newUser.facebook.token = accessToken,
-					newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName,
-					newUser.facebook.email = profile.emails[0].value;
+			if(!req.user){
+				User.findOne({'facebook.id' : profile.id}, function(err, user) {
+					if(err)
+						return done(err);
+					if(user)
+						return done(null, user);
+					else{
+						var newUser = new User();
+						newUser.facebook.id = profile.id,
+						newUser.facebook.token = accessToken,
+						newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName,
+						newUser.facebook.email = profile.emails[0].value;
+	
+						newUser.save(function(err){
+							if(err)
+								throw err;
+							return done(null, newUser);
+						});
+					}
+				});
+			}
+			else {
+				var user = req.user;
+				user.facebook.id = profile.id,
+				user.facebook.token = accessToken,
+				user.facebook.name = profile.name.givenName + ' ' + profile.name.familyName,
+				user.facebook.email = profile.emails[0].value;
 
-					newUser.save(function(err){
-						if(err)
-							throw err;
-						return done(null, newUser);
-					});
-				}
-			});
+				user.save(function(err){
+					if(err)
+						throw err;
+					return done(null, user);
+				});
+			}
 		});
 	  }
 	));
@@ -64,32 +80,46 @@ module.exports = function(passport) {
     passport.use(new GoogleStrategy({
 		clientID: configAuth.googleAuth.clientId,
 		clientSecret: configAuth.googleAuth.clientSecret,
-		callbackURL: configAuth.googleAuth.callbackURL
+		callbackURL: configAuth.googleAuth.callbackURL,
+		passReqToCallback: true
 	  },
-	  function(accessToken, refreshToken, profile, done) {
+	  function(req, accessToken, refreshToken, profile, done) {
 		console.log(profile);
 		process.nextTick(function(){
-			User.findOne({'google.id' : profile.id}, function(err, user) {
-				if(err)
-					return done(err);
-				if(user)
+			if(!req.user)	{
+				User.findOne({'google.id' : profile.id}, function(err, user) {
+					if(err)
+						return done(err);
+					if(user)
+						return done(null, user);
+					else{
+						var newUser = new User();
+						newUser.google.id = profile.id,
+						newUser.google.token = accessToken,
+						newUser.google.name = profile.displayName,
+						newUser.google.email = profile.emails[0].value,
+						newUser.save(function(err){
+							if(err)
+								throw err;
+							return done(null, newUser);
+						});
+					}
+				});
+			}
+			else {
+				var user = req.user;
+				user.google.id = profile.id,
+				user.google.token = accessToken,
+				user.google.name = profile.displayName,
+				user.google.email = profile.emails[0].value,
+				
+				user.save(function(err){
+					if(err)
+						throw err;
 					return done(null, user);
-				else{
-					var newUser = new User();
-					newUser.google.id = profile.id,
-					newUser.google.token = accessToken,
-					newUser.google.name = profile.displayName,
-					newUser.google.email = profile.emails[0].value,
-					newUser.google.gender = profile.gender,
-					newUser.google.photos = profile.photos[0].value;
-					console.log(newUser.google.birthday);
-					newUser.save(function(err){
-						if(err)
-							throw err;
-						return done(null, newUser);
-					});
-				}
-			});
+				});
+			}
+			
 		});
 	  }
 	));
@@ -98,31 +128,43 @@ module.exports = function(passport) {
 		consumerKey: configAuth.twitterAuth.clientId,
 		consumerSecret: configAuth.twitterAuth.clientSecret,
 		callbackURL: configAuth.twitterAuth.callbackURL,
-		includeEmail: true
+		includeEmail: true,
+		passReqToCallback: true
 	  },
-	  function(token, tokenSecret, profile, done) {
-		console.log(profile);
-		console.log(profile.emails[0].value);
+	  function(req, token, tokenSecret, profile, done) {
 		process.nextTick(function(){
-			User.findOne({'twitter.id' : profile.id}, function(err, user) {
-				if(err)
-					return done(err);
-				if(user)
+			if(!req.user) {
+				User.findOne({'twitter.id' : profile.id}, function(err, user) {
+					if(err)
+						return done(err);
+					if(user)
+						return done(null, user);
+					else{
+						var newUser = new User();
+						newUser.twitter.id = profile.id,
+						newUser.twitter.token = token,
+						newUser.twitter.name = profile.displayName,
+						newUser.twitter.email = profile.emails[0].value;
+						newUser.save(function(err){
+							if(err)
+								throw err;
+							return done(null, newUser);
+						});
+					}
+				});
+			}
+			else {
+				var user = req.user;
+				user.twitter.id = profile.id,
+				user.twitter.token = token,
+				user.twitter.name = profile.displayName,
+				user.twitter.email = profile.emails[0].value;
+				user.save(function(err){
+					if(err)
+						throw err;
 					return done(null, user);
-				else{
-					var newUser = new User();
-					newUser.twitter.id = profile.id,
-					newUser.twitter.token = token,
-					newUser.twitter.name = profile.displayName,
-					newUser.twitter.email = profile.emails[0].value;
-					console.log(newUser.twitter.email);
-					newUser.save(function(err){
-						if(err)
-							throw err;
-						return done(null, newUser);
-					});
-				}
-			});
+				});
+			}
 		});
 	  }
 	));
@@ -130,30 +172,46 @@ module.exports = function(passport) {
 	passport.use(new GithubStrategy({
 		clientID: configAuth.githubAuth.clientId,
 		clientSecret: configAuth.githubAuth.clientSecret,
-		callbackURL: configAuth.githubAuth.callbackURL
+		callbackURL: configAuth.githubAuth.callbackURL,
+		passReqToCallback: true
 	  },
-	  function(accessToken, refreshToken, profile, done) {
-		console.log(profile);
+	  function(req, accessToken, refreshToken, profile, done) {
 		process.nextTick(function(){
-			User.findOne({'github.id' : profile.id}, function(err, user) {
-				if(err)
-					return done(err);
-				if(user)
-					return done(null, user);
-				else{
-					var newUser = new User();
-					newUser.github.id = profile.id,
-					newUser.github.token = accessToken,
-					newUser.github.name = profile.displayName,
-					newUser.github.email = profile.emails[0].value;
+			if(!req.user) {
+				User.findOne({'github.id' : profile.id}, function(err, user) {
+					if(err)
+						return done(err);
+					if(user)
+						return done(null, user);
+					else{
+						var newUser = new User();
+						newUser.github.id = profile.id,
+						newUser.github.token = accessToken,
+						newUser.github.name = profile.displayName,
+						newUser.github.email = profile.emails[0].value;
+	
+						newUser.save(function(err){
+							if(err)
+								throw err;
+							return done(null, newUser);
+						});
+					}
+				});
+			}
+			else{
+				var user = req.user;
+				user.github.id = profile.id,
+				user.github.token = accessToken,
+				user.github.name = profile.displayName,
+				user.github.email = profile.emails[0].value;
 
-					newUser.save(function(err){
-						if(err)
-							throw err;
-						return done(null, newUser);
-					});
-				}
-			});
+				user.save(function(err){
+					if(err)
+						throw err;
+					return done(null, user);
+				});
+			}
+			
 		});
 	  }
 	));

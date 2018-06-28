@@ -12,7 +12,7 @@ app.get('*', function(req, res, next) {
 
 app.get('/register', function(req, res) {
     res.render('register.pug');
-});
+}); 
 
 app.post('/register', function(req, res, next) {
     const name = req.body.name;
@@ -83,7 +83,7 @@ app.get('/login', function(req, res) {
 });
 
 app.post('/login', function(req, res, next) {
-    passport.authenticate('local-strategy', {
+    passport.authenticate('local-signin', {
         successRedirect: '/users/profile',
         failureRedirect: '/users/login',
         failureFlash: true
@@ -126,6 +126,21 @@ app.get('/auth/github',passport.authenticate('github'));
 app.get('/auth/github/callback', passport.authenticate('github', { 
     successRedirect: '/users/profile',
     failureRedirect: '/register' 
+}));
+
+app.get('/connect/facebook', passport.authorize('facebook', { scope: 'email' }));
+app.get('/connect/google', passport.authorize('google', { scope: ['profile', 'email'] }));
+app.get('/connect/twitter', passport.authorize('twitter'));
+app.get('/connect/github', passport.authorize('github'));
+
+app.get('/connect/local', function(req, res){
+    res.render('../views/login.pug');
+});
+
+app.post('/connect/local', passport.authenticate('local-signin', {
+    successRedirect: '/profile',
+    failureRedirect: '/connect/local',
+    failureFlash: true
 }));
 
 function isLoggedIn(req, res, next) {

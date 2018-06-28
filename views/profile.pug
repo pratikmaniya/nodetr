@@ -23,86 +23,115 @@ html
                 br
                 br
             .row
-                // LOCAL INFORMATION
-                if !(user.google.name || user.facebook.name || user.twitter.name || user.github.name)            
-                    .col-sm-6
-                        .well
-                            h3
-                                span.fa.fa-user
-                                |  Local
-                            p
-                                if user.local.name
-                                    strong name
-                                    |  : #{user.local.name}
-                                    br
-                                if user.local.username
-                                    strong username
-                                    |  : #{user.local.username}
-                                    br
-                                if user.local.email
-                                    strong email
-                                    |  : #{user.local.email}
-                        
-                // GOOGLE INFORMATION
-                if !(user.local.name || user.facebook.name || user.twitter.name || user.github.name)  
-                    .col-sm-6
-                        .well
-                            h3.text-danger
-                                span.fa.fa-google-plus
-                                |  Google
-                            p
-                                strong name
-                                |  : #{user.google.name}
-                                br
-                                strong email
-                                |  : #{user.google.email}
-                                br
-                                if user.google.gender
-                                    strong gender
-                                    |  : #{user.google.gender}
-                                    br
-                                if user.google.gender
-                                    strong photo
-                                    |  : #{user.google.photos}
+            
+            // LOCAL INFORMATION
+            .col-sm-6
+                .well
+                    h3
+                        span.fa.fa-user
+                        |  Local
+                    if (user.local.username)
+                        p
+                            strong name
+                            |  : #{user.local.name}
+                            br
+                            strong username
+                            |  : #{user.local.username}
+                            br
+                            strong email
+                            |  : #{user.local.email}
+                            br
+                            br
+                            a.btn.btn-primary(href='/users/unlink/local') Unlink
+                    
+                    else
+                        a.btn.btn-primary(href='/users/connect/local') Connect Local
+            
+            // FACEBOOK INFORMATION
+            .col-sm-6
+                .well
+                    h3.text-primary
+                        span.fa.fa-facebook
+                        |  Facebook
+                    if(user.facebook.email)
+                        p
+                            strong name
+                            |  : #{user.facebook.name}
+                            br
+                            strong email
+                            |  : #{user.facebook.email}
+                            br
+                            br
+                            a.btn.btn-primary(href='/users/unlink/facebook') Unlink
                 
-                // FACEBOOK INFORMATION
-                if !(user.local.name || user.google.name || user.twitter.name || user.github.name)  
-                    .col-sm-6
-                        .well
-                            h3.text-primary
-                                span.fa.fa-facebook
-                                |  Facebook
-                            p
-                                strong name
-                                |  : #{user.facebook.name}
-                                br
-                                strong email
-                                |  : #{user.facebook.email}
+                    else
+                        a.btn.btn-primary(href='/users/connect/facebook') Connect Local
 
-                // TWITTER INFORMATION
-                if !(user.local.name || user.google.name || user.facebook.name || user.github.name)  
-                    .col-sm-6
-                        .well
-                            h3.text-primary
-                                span.fa.fa-twitter
-                                |  Twitter
-                            p
-                                strong name
-                                |  : #{user.twitter.name}
+            // GOOGLE INFORMATION
+            .col-sm-6
+                .well
+                    h3.text-danger
+                        span.fa.fa-google-plus
+                        |  Google
+                    if(user.google.email)
+                        p
+                            strong name
+                            |  : #{user.google.name}
+                            br
+                            strong email
+                            |  : #{user.google.email}
+                            br
+                            if user.google.gender
+                                strong gender
+                                |  : #{user.google.gender}
                                 br
-                                strong email
-                                |  : #{user.twitter.email}
+                            if user.google.gender
+                                strong photo
+                                |  : #{user.google.photos}
+                            br
+                            br
+                            a.btn.btn-primary(href='/users/unlink/google') Unlink
+                    
+                    else
+                        a.btn.btn-primary(href='/users/connect/google') Connect Local
+        
+            
+            // TWITTER INFORMATION
+            .col-sm-6
+                .well
+                    h3.text-primary
+                        span.fa.fa-twitter
+                        |  Twitter
+                    if(user.twitter.email)
+                        p
+                            strong name
+                            |  : #{user.twitter.name}
+                            br
+                            strong email
+                            |  : #{user.twitter.email}
+                            br
+                            br
+                            a.btn.btn-primary(href='/users/unlink/twitter') Unlink
 
-                // GITHUB INFORMATION
-                if !(user.local.name || user.google.name || user.facebook.name || user.twitter.name)  
-                    .col-sm-6
-                        .well
-                            h3.text-primary(style='color:#444444')
-                                span.fa.fa-github
-                                |  Github
-                            p
-                                strong name
-                                |  : #{user.github.name}
-                                br
-                                strong email
-                                |  : #{user.github.email}
+                    else
+                        a.btn.btn-primary(href='/users/connect/twitter') Connect Local
+
+            // GITHUB INFORMATION  
+            .col-sm-6
+                .well
+                    h3.text-primary(style='color:#444444')
+                        span.fa.fa-github
+                        |  Github
+                    if(user.github.email)
+                        p
+                            strong name
+                            |  : #{user.github.name}
+                            br
+                            strong email
+                            |  : #{user.github.email}
+                            br
+                            br
+                            a.btn.btn-primary(href='/users/unlink/github') Unlink
+                
+                    else
+                        a.btn.btn-primary(href='/users/connect/github') Connect Local
