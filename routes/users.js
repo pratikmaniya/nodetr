@@ -121,6 +121,13 @@ app.get('/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/register' 
 }));
 
+app.get('/auth/github',passport.authenticate('github'));
+
+app.get('/auth/github/callback', passport.authenticate('github', { 
+    successRedirect: '/users/profile',
+    failureRedirect: '/register' 
+}));
+
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()){
         return next();

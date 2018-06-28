@@ -2,6 +2,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
+const GithubStrategy = require('passport-github').Strategy;
 const User = require('../models/users');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
@@ -115,6 +116,37 @@ module.exports = function(passport) {
 					newUser.twitter.name = profile.displayName,
 					newUser.twitter.email = profile.emails[0].value;
 					console.log(newUser.twitter.email);
+					newUser.save(function(err){
+						if(err)
+							throw err;
+						return done(null, newUser);
+					});
+				}
+			});
+		});
+	  }
+	));
+
+	passport.use(new GithubStrategy({
+		clientID: configAuth.githubAuth.clientId,
+		clientSecret: configAuth.githubAuth.clientSecret,
+		callbackURL: configAuth.githubAuth.callbackURL
+	  },
+	  function(accessToken, refreshToken, profile, done) {
+		console.log(profile);
+		process.nextTick(function(){
+			User.findOne({'github.id' : profile.id}, function(err, user) {
+				if(err)
+					return done(err);
+				if(user)
+					return done(null, user);
+				else{
+					var newUser = new User();
+					newUser.github.id = profile.id,
+					newUser.github.token = accessToken,
+					newUser.github.name = profile.displayName,
+					newUser.github.email = profile.emails[0].value;
+
 					newUser.save(function(err){
 						if(err)
 							throw err;

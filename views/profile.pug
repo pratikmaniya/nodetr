@@ -92,3 +92,17 @@ html
                                 br
                                 strong email
                                 |  : #{user.twitter.email}
+
+                // GITHUB INFORMATION
+                if !(user.local.name || user.google.name || user.facebook.name || user.twitter.name)  
+                    .col-sm-6
+                        .well
+                            h3.text-primary(style='color:#444444')
+                                span.fa.fa-github
+                                |  Github
+                            p
+                                strong name
+                                |  : #{user.github.name}
+                                br
+                                strong email
+                                |  : #{user.github.email}

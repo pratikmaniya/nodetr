@@ -13,14 +13,18 @@ block content
             br
         input.btn.btn-primary(type='submit', value='Submit')    
     
-        a.btn.btn-primary(style='margin-left:3px' onclick="window.open('/users/auth/facebook', 'newwindow', 'width=700,height=700');return false;")
+        a.btn.btn-primary(href='/users/auth/facebook' style='margin-left:3px')
             span.fa.fa-facebook  
             |   Login with Facebook
 
-        a.btn.btn-danger(style='margin-left:3px' onclick="window.open('/users/auth/google', 'newwindow', 'width=700,height=700');return false;")
+        a.btn.btn-danger(href='/users/auth/google' style='margin-left:3px')
             span.fa.fa-google-plus  
-            |   Login with google
+            |   Login with Google
 
-        a.btn.btn-primary(style='margin-left:3px; background-color:#55ACEE; border-color: #55ACEE;' onclick="window.open('/users/auth/twitter', 'newwindow', 'width=700,height=700');return true;")
+        a.btn.btn-primary(href='/users/auth/twitter' style='margin-left:3px; background-color:#55ACEE; border-color: #55ACEE;')
             span.fa.fa-twitter  
-            |   Login with twitter
+            |   Login with Twitter
+
+        a.btn.btn-primary(href='/users/auth/github' style='margin-left:3px; background-color:#444444; border-color: #444444;')
+            span.fa.fa-github
+            |   Login with Github

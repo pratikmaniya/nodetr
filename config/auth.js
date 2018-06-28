@@ -13,5 +13,10 @@ module.exports = {
         'clientId':'Qt1gSeWe7uStk3kYJENpqChrD',
         'clientSecret':'EkzppWP5hARl9eVfzbYq0TWQRifduRUY2Kpoo53c9TpIqTWI3q',
         'callbackURL':'https://modasa.herokuapp.com/users/auth/twitter/callback'
+    },
+    'githubAuth':{
+        'clientId':'527353234ea9c38fb139',
+        'clientSecret':'9d0bb9ca774f2a862af14d2f71127a1f5f7fa1a8',
+        'callbackURL':'https://modasa.herokuapp.com/users/auth/github/callback'
     }
 }
