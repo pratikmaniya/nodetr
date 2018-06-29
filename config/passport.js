@@ -77,8 +77,8 @@ module.exports = function(passport) {
 					if(user){
 						if(!user.facebook.token){
 							user.facebook.token = accessToken;
-							newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName,
-							newUser.facebook.email = profile.emails[0].value;
+							user.facebook.name = profile.name.givenName + ' ' + profile.name.familyName,
+							user.facebook.email = profile.emails[0].value;
 							user.save(function(err){
 								if(err)
 									throw err;
