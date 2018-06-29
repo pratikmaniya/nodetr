@@ -11,6 +11,8 @@ html
 
     body
         .container
+            != messages('message', locals)
+        .container
             .page-header.text-center
                 h1
                     span.fa.fa-anchor
@@ -30,12 +32,12 @@ html
                     h3
                         span.fa.fa-user
                         |  Local
-                    if (user.local.username)
+                    if (user.local.email)
                         p
-                            strong name
+                            strong Name
                             |  : #{user.local.name}
                             br
-                            strong email
+                            strong Email
                             |  : #{user.local.email}
                             br
                             br
@@ -50,12 +52,12 @@ html
                     h3.text-primary
                         span.fa.fa-facebook
                         |  Facebook
-                    if(user.facebook.email)
+                    if(user.facebook.token)
                         p
-                            strong name
+                            strong Name
                             |  : #{user.facebook.name}
                             br
-                            strong email
+                            strong Email
                             |  : #{user.facebook.email}
                             br
                             br
@@ -70,12 +72,12 @@ html
                     h3.text-danger
                         span.fa.fa-google-plus
                         |  Google
-                    if(user.google.email)
+                    if(user.google.token)
                         p
-                            strong name
+                            strong Name
                             |  : #{user.google.name}
                             br
-                            strong email
+                            strong Email
                             |  : #{user.google.email}
                             br
                             br
@@ -91,12 +93,12 @@ html
                     h3.text-primary
                         span.fa.fa-twitter
                         |  Twitter
-                    if(user.twitter.email)
+                    if(user.twitter.token)
                         p
-                            strong name
+                            strong Name
                             |  : #{user.twitter.name}
                             br
-                            strong email
+                            strong Email
                             |  : #{user.twitter.email}
                             br
                             br
@@ -111,12 +113,12 @@ html
                     h3.text-primary(style='color:#444444')
                         span.fa.fa-github
                         |  Github
-                    if(user.github.email)
+                    if(user.github.token)
                         p
-                            strong name
+                            strong Name
                             |  : #{user.github.name}
                             br
-                            strong email
+                            strong Email
                             |  : #{user.github.email}
                             br
                             br

@@ -10,7 +10,7 @@ app.get('*', function(req, res, next) {
     next();
 });
 
-app.get('/register', function(req, res) {
+app.get('/register', isNotLoggedIn, function(req, res) {
     res.render('register.pug');
 }); 
 
@@ -78,7 +78,7 @@ app.post('/register', function(req, res, next) {
     }
 });
 
-app.get('/login', function(req, res) {
+app.get('/login', isNotLoggedIn, function(req, res) {
     res.render('login.pug',);
 });
 
@@ -88,6 +88,10 @@ app.post('/login', function(req, res, next) {
         failureRedirect: '/users/login',
         failureFlash: true
     })(req, res, next);
+});
+
+app.get('/connectlogin', isNotLoggedIn, function(req, res) {
+    res.render('connectLogin.pug',);
 });
 
 app.get('/logout', function(req, res) {
@@ -128,26 +132,85 @@ app.get('/auth/github/callback', passport.authenticate('github', {
     failureRedirect: '/register' 
 }));
 
-app.get('/connect/facebook', passport.authorize('facebook', { scope: 'email' }));
-app.get('/connect/google', passport.authorize('google', { scope: ['profile', 'email'] }));
-app.get('/connect/twitter', passport.authorize('twitter'));
-app.get('/connect/github', passport.authorize('github'));
+app.get('/connect/facebook', isLoggedIn, passport.authorize('facebook', { scope: 'email' }));
+app.get('/connect/google', isLoggedIn, passport.authorize('google', { scope: ['profile', 'email'] }));
+app.get('/connect/twitter', isLoggedIn, passport.authorize('twitter'));
+app.get('/connect/github', isLoggedIn, passport.authorize('github'));
 
-app.get('/connect/local', function(req, res){
-    res.render('../views/login.pug');
+app.get('/connect/local', isLoggedIn, function(req, res){
+    res.render('../views/connectLogin.pug');
 });
 
 app.post('/connect/local', passport.authenticate('local-signin', {
-    successRedirect: '/profile',
-    failureRedirect: '/connect/local',
+    successRedirect: '/users/profile',
+    failureRedirect: '/users/connect/local',
     failureFlash: true
 }));
+
+app.get('/unlink/facebook', isLoggedIn, function(req,res) {
+    var user = req.user;
+    user.facebook.token = null;
+
+    user.save(function(err){
+        if (err)
+            throw err;
+        res.redirect('/users/profile');
+    });
+});
+app.get('/unlink/google', isLoggedIn, function(req,res) {
+    var user = req.user;
+    user.google.token = null;
+
+    user.save(function(err){
+        if (err)
+            throw err;
+        res.redirect('/users/profile');
+    });
+});
+app.get('/unlink/twitter', isLoggedIn, function(req,res) {
+    var user = req.user;
+    user.twitter.token = null;
+
+    user.save(function(err){
+        if (err)
+            throw err;
+        res.redirect('/users/profile');
+    });
+});
+app.get('/unlink/github', isLoggedIn, function(req,res) {
+    var user = req.user;
+    user.github.token = null;
+
+    user.save(function(err){
+        if (err)
+            throw err;
+        res.redirect('/users/profile');
+    });
+});
+app.get('/unlink/local', isLoggedIn, function(req,res) {
+    var user = req.user;
+    user.local.email= null;
+
+    user.save(function(err){
+        if (err)
+            throw err;
+        res.redirect('/users/profile');
+    });
+});
 
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()){
         return next();
     }
     res.redirect('/users/login');
+}
+
+function isNotLoggedIn(req, res, next) {
+    if(!req.isAuthenticated()){
+        return next();
+    }
+    req.flash('danger', 'You are already logged in');
+    res.redirect('/users/profile');
 }
 
 module.exports = app;

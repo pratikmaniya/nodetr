@@ -1,0 +1,32 @@
+doctype html
+html   
+    head    
+        title Modasa
+        link(rel='icon' type='image/x-icon' href='../favicon.ico')
+        link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+        link(rel='stylesheet' href='/style.css')
+        link(rel='stylesheet' href='https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css')   
+    body
+    br
+    br
+    .container
+        .container
+            != messages('message', locals)
+        h1 Connect Login
+        form(method='POST', action='/users/connect/local')
+            #form-group
+                label Username:
+                input.form-control(name='username', type='text')
+                br
+            #form-group
+                label Password:
+                input.form-control(name='password', type='password')
+                br
+            input.btn.btn-primary(type='submit', value='Submit')
+        footer
+            hr
+            strong
+                p &copy; 2018 All rights reserved by MODASA&trade;.
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+        script(src='/main.js')
