@@ -206,9 +206,11 @@ function isLoggedIn(req, res, next) {
 function isUnlinked(req, res, next) {
     if(username){
         User.findOne({'local.username':username}, function(err, user){
+            console.log(user);
             if(err) throw err;
             if(user.local.email == null){
-                LUser.findOne({'local.username':username}, function(err, luser){
+                LUser.findOne({'local.username':user.local.username}, function(err, luser){
+                    console.log(luser);
                     if(err){ throw err;}
                     user.local.email = luser.local.email;
                     user.save(function(err){
@@ -224,6 +226,7 @@ function isUnlinked(req, res, next) {
     else{
         return next();
     }
+    username = undefined;
 }
 
 function isNotLoggedIn(req, res, next) {

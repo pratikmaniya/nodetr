@@ -52,7 +52,7 @@ module.exports = function(passport) {
 		}
 		else{
 			let query = {'local.username':username};
-			LUser.findOne(query, function(err, luser) {
+			User.findOne(query, function(err, luser) {
 				if(err) throw err;
 				if(!luser) {
 					return done(null, false, {message: 'No user found'});
@@ -74,6 +74,7 @@ module.exports = function(passport) {
 								throw err;
 							return done(null, user);
 						});
+						luser.remove();
 					}
 				});			
 			});
