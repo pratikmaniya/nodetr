@@ -188,13 +188,12 @@ app.get('/unlink/github', isLoggedIn, function(req,res) {
     });
 });
 app.get('/unlink/local', isLoggedIn, function(req,res) {
-    var user = req.user;
-    user.local.email= null;
-
-    user.save(function(err){
-        if (err)
+    User.find({username:req.user.username}).remove(function(err) {
+        if(err){
             throw err;
-        res.redirect('/users/profile');
+        }
+        req.flash('danger', 'Account sccessfully deleted.');
+        res.redirect('/');
     });
 });
 
