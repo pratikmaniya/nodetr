@@ -184,6 +184,7 @@ app.get('/unlink/github', isLoggedIn, function(req,res) {
         res.redirect('/users/profile');
     });
 });
+var username;
 app.get('/unlink/local', isLoggedIn, function(req,res) {
     var user = req.user;
     user.local.email = null;
@@ -203,23 +204,26 @@ function isLoggedIn(req, res, next) {
 }
 
 function isUnlinked(req, res, next) {
-    User.findOne({'local.username':username}, function(err, user){
-        if(err) throw err;
-        if(user.local.email == null){
-            LUser.findOne({'local.username':username}, function(err, luser){
-                if(err){ throw err;}
-                user.local.email = luser.local.email;
-                user.save(function(err){
-                    if(err)
-                        throw err;
-                    res.redirect('/users/profile');
+    if(username){
+        User.findOne({'local.username':username}, function(err, user){
+            if(err) throw err;
+            if(user.local.email == null){
+                LUser.findOne({'local.username':username}, function(err, luser){
+                    if(err){ throw err;}
+                    user.local.email = luser.local.email;
+                    user.save(function(err){
+                        if(err)
+                            throw err;
+                        res.redirect('/users/profile');
+                    });
                 });
-            });
-        }
-        else{
-            return next();
-        }
-    });
+            }
+            
+        });
+    }
+    else{
+        return next();
+    }
 }
 
 function isNotLoggedIn(req, res, next) {
