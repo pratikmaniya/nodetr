@@ -37,18 +37,18 @@ app.post('/register', function(req, res, next) {
         });
     }
     else{
-        let newUser = new User();
+        let newUser = new LUser();
             newUser.local.name = name;
             newUser.local.email = email;
             newUser.local.username = username;
             newUser.local.password = password;
-        User.find({email : newUser.local.email}, function(err, email) {
+        LUser.find({email : newUser.local.email}, function(err, email) {
             if(email.length){
                 req.flash('danger', 'Email is already registered!');
                 res.redirect('/users/register');
             }
             else{
-                User.find({username:newUser.local.username}, function(err, user) {
+                LUser.find({username:newUser.local.username}, function(err, user) {
                     if(user.length){
                         req.flash('danger', 'Sorry, username is already taken try different one please!');
                         res.redirect('/users/register');
@@ -89,10 +89,6 @@ app.post('/login', function(req, res, next) {
         failureRedirect: '/users/login',
         failureFlash: true
     })(req, res, next);
-});
-
-app.get('/connectlogin', isNotLoggedIn, function(req, res) {
-    res.render('connectLogin.pug',);
 });
 
 app.get('/logout', function(req, res) {
@@ -138,6 +134,16 @@ app.get('/connect/google', isLoggedIn, passport.authorize('google', { scope: ['p
 app.get('/connect/twitter', isLoggedIn, passport.authorize('twitter'));
 app.get('/connect/github', isLoggedIn, passport.authorize('github'));
 
+app.get('/connect/local', isLoggedIn, isUnlinked, function(req, res){
+    res.render('../views/connectLogin.pug');
+});
+
+app.post('/connect/local', passport.authenticate('local-signin', {
+    successRedirect: '/users/profile',
+    failureRedirect: '/users/connect/local',
+    failureFlash: true
+}));
+
 app.get('/unlink/facebook', isLoggedIn, function(req,res) {
     var user = req.user;
     user.facebook.token = null;
@@ -178,6 +184,16 @@ app.get('/unlink/github', isLoggedIn, function(req,res) {
         res.redirect('/users/profile');
     });
 });
+app.get('/unlink/local', isLoggedIn, function(req,res) {
+    var user = req.user;
+    user.local.email = null;
+    username = user.local.username;
+    user.save(function(err){
+        if (err)
+            throw err;
+            res.redirect('/users/profile');
+    });
+});
 
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()){
@@ -186,12 +202,34 @@ function isLoggedIn(req, res, next) {
     res.redirect('/users/login');
 }
 
+function isUnlinked(req, res, next) {
+    User.findOne({'local.username':username}, function(err, user){
+        if(err) throw err;
+        if(user.local.email == null){
+            LUser.findOne({'local.username':username}, function(err, luser){
+                if(err){ throw err;}
+                user.local.email = luser.local.email;
+                user.save(function(err){
+                    if(err)
+                        throw err;
+                    res.redirect('/users/profile');
+                });
+            });
+        }
+        else{
+            return next();
+        }
+    });
+}
+
 function isNotLoggedIn(req, res, next) {
     if(!req.isAuthenticated()){
         return next();
     }
-    req.flash('danger', 'You are already logged in');
-    res.redirect('/users/profile');
+    else{
+        req.flash('danger', 'You are already logged in');
+        res.redirect('/users/profile');
+    }
 }
 
 module.exports = app;

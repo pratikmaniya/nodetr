@@ -41,6 +41,10 @@ html
                             |  : #{user.local.email}
                             br
                             br
+                            a.btn.btn-primary(href='/users/unlink/local') Unlink
+                
+                    else
+                        a.btn.btn-primary(href='/users/connect/local') Connect Local
                             
             // FACEBOOK INFORMATION
             .col-sm-6

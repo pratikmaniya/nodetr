@@ -15,15 +15,34 @@ module.exports = function(passport) {
 	}, function(req, username, password, done){
 		if(!req.user){
 			let query = {'local.username':username};
-			User.findOne(query, function(err, user) {
+			LUser.findOne(query, function(err, luser) {
 				if(err) throw err;
-				if(!user) {
+				if(!luser) {
 					return done(null, false, {message: 'No user found'});
 				}
-				bcrypt.compare(password, user.local.password, function(err, isMatch) {
+				bcrypt.compare(password, luser.local.password, function(err, isMatch) {
 					if(err) throw err;
 					if(isMatch) {
-						return done(null, user);
+						let query = {'local.username': username};
+						User.findOne(query, function(err, user) {
+							if(err) throw err;
+							if(user) {
+								return done(null, user);
+							}
+							else{
+								var user = new User();
+								user.local.name = luser.local.name;
+								user.local.email = luser.local.email;
+								user.local.username = luser.local.username;
+								user.local.password = luser.local.password;
+
+								user.save(function(err){
+									if(err)
+										throw err;
+									return done(null, user);
+								});
+							}
+						});
 					}
 					else {
 						return done(null, false, {message: 'Wrong password'});
@@ -33,7 +52,7 @@ module.exports = function(passport) {
 		}
 		else{
 			let query = {'local.username':username};
-			User.findOne(query, function(err, luser) {
+			LUser.findOne(query, function(err, luser) {
 				if(err) throw err;
 				if(!luser) {
 					return done(null, false, {message: 'No user found'});
