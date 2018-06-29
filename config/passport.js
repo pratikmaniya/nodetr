@@ -4,6 +4,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const GithubStrategy = require('passport-github').Strategy;
 const User = require('../models/users');
+const LUser = require('../models/localuser');
 const config = require('../config/database');
 const bcrypt = require('bcryptjs');
 var configAuth = require('./auth');

@@ -3,7 +3,8 @@ const app = express();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
-let User = require('../models/users');
+const User = require('../models/users');
+const LUser = require('../models/localuser');
 
 app.get('*', function(req, res, next) {
     res.locals.user = req.user || null;
@@ -137,16 +138,6 @@ app.get('/connect/google', isLoggedIn, passport.authorize('google', { scope: ['p
 app.get('/connect/twitter', isLoggedIn, passport.authorize('twitter'));
 app.get('/connect/github', isLoggedIn, passport.authorize('github'));
 
-app.get('/connect/local', isLoggedIn, function(req, res){
-    res.render('../views/connectLogin.pug');
-});
-
-app.post('/connect/local', passport.authenticate('local-signin', {
-    successRedirect: '/users/profile',
-    failureRedirect: '/users/connect/local',
-    failureFlash: true
-}));
-
 app.get('/unlink/facebook', isLoggedIn, function(req,res) {
     var user = req.user;
     user.facebook.token = null;
@@ -185,15 +176,6 @@ app.get('/unlink/github', isLoggedIn, function(req,res) {
         if (err)
             throw err;
         res.redirect('/users/profile');
-    });
-});
-app.get('/unlink/local', isLoggedIn, function(req,res) {
-    User.find({username:req.user.username}).remove(function(err) {
-        if(err){
-            throw err;
-        }
-        req.flash('danger', 'Account sccessfully deleted.');
-        res.redirect('/');
     });
 });
 
