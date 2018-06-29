@@ -37,6 +37,7 @@ app.post('/register', function(req, res, next) {
         });
     }
     else{
+        let uuser = new User();
         let newUser = new LUser();
             newUser.local.name = name;
             newUser.local.email = email;
@@ -66,6 +67,11 @@ app.post('/register', function(req, res, next) {
                                         return;
                                     }
                                     else {
+                                        uuser.local.name = newUser.local.name;
+                                        uuser.local.email = newUser.local.email;
+                                        uuser.local.username = newUser.local.username;
+                                        uuser.local.password = newUser.local.password;    
+                                        uuser.save();
                                         req.flash('success', 'You are now registered and can login!');
                                         res.redirect('/users/login');
                                     }
