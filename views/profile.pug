@@ -19,7 +19,8 @@ html
                     |  Profile Page
                     br
                 h3
-                    |  Welcome strong #{user.local.name || user.google.name}
+                    |  Welcome
+                    strong #{user.local.name || user.google.name}
                 a.btn.btn-default.btn-sm(href='/') Home
                 a.btn.btn-default.btn-sm(href='/users/logout', id='logout') Logout
                 br
