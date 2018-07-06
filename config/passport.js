@@ -139,7 +139,7 @@ module.exports = function(passport) {
 	  }
 	));
 
-    passport.post(new GoogleStrategy({
+    passport.use(new GoogleStrategy({
 		clientID: configAuth.googleAuth.clientId,
 		clientSecret: configAuth.googleAuth.clientSecret,
 		callbackURL: configAuth.googleAuth.callbackURL,
