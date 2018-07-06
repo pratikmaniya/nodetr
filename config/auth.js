@@ -12,7 +12,7 @@ module.exports = {
     'twitterAuth':{
         'clientId' : 'Qt1gSeWe7uStk3kYJENpqChrD',
         'clientSecret' : 'EkzppWP5hARl9eVfzbYq0TWQRifduRUY2Kpoo53c9TpIqTWI3q',
-        'callbackURL' : 'https://modasa.herokuapp.com/users/auth/twitter/callback'
+        'callbackURL' : 'http://localhost:8080/users/auth/twitter/callback'
     },
     'githubAuth':{
         'clientId' : '527353234ea9c38fb139',
