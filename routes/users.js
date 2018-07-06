@@ -138,7 +138,7 @@ app.get('/auth/github/callback', passport.authenticate('github', {
 app.get('/connect/facebook', isLoggedIn, passport.authorize('facebook', { scope: 'email' }));
 app.get('/connect/google', isLoggedIn, passport.authorize('google', { scope: ['profile', 'email'] }));
 app.post('/connect/twitter', isLoggedIn, passport.authorize('twitter'));
-app.get('/connect/github', isLoggedIn, passport.authorize('github'));
+app.post('/connect/github', isLoggedIn, passport.authorize('github'));
 
 app.get('/connect/local', isLoggedIn, isUnlinked, function(req, res){
     res.render('../views/connectLogin.pug');
