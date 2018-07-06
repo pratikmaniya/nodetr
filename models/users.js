@@ -16,19 +16,19 @@ let userSchema = mongoose.Schema({
         facebook:{
             id: String,
             token: String,
-            email: String,
+            email: { type: String, default: 'Email is not specified in Facebook!' },
             name: String
         },
         twitter:{
             id: String,
             token: String,
-            email: String,
+            email: { type: String, default: 'Email is not specified in Twitter!' },
             name: String
         },
         github:{
             id: String,
             token: String,
-            email: String,
+            email: { type: String, default: 'Email is not specified in Github!' },
             name: String
         }
 });
