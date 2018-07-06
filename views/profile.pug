@@ -20,7 +20,7 @@ html
                 br
                 h4
                     |  Welcome 
-                    strong #{user.local.name || user.google.name}
+                    strong #{user.local.name || user.facebook.name || user.google.name || user.twitter.name || user.github.name}
                 a.btn.btn-default.btn-sm(href='/') Home
                 a.btn.btn-default.btn-sm(href='/users/logout', id='logout') Logout
                 br
