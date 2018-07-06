@@ -10,8 +10,8 @@ module.exports = {
         'callbackURL' : 'https://modasa.herokuapp.com/users/auth/facebook/callback'
     },
     'twitterAuth':{
-        'clientId' : 'Qt1gSeWe7uStk3kYJENpqChrD',
-        'clientSecret' : 'EkzppWP5hARl9eVfzbYq0TWQRifduRUY2Kpoo53c9TpIqTWI3q',
+        'clientId' : 'hIBIqjjlcG6M44w16y6TTDrc0',
+        'clientSecret' : 'wMTOMsTz9WgNX3O3BHS99TOj0as1z8jT5Ed9Uh7U3OggVCg29Z',
         'callbackURL' : 'https://modasa.herokuapp.com/users/auth/twitter/callback'
     },
     'githubAuth':{

@@ -200,9 +200,8 @@ module.exports = function(passport) {
 		consumerKey: configAuth.twitterAuth.clientId,
 		consumerSecret: configAuth.twitterAuth.clientSecret,
 		callbackURL: configAuth.twitterAuth.callbackURL,
-		userProfileURL  : 'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
-		includeEmail: true,
-		passReqToCallback: true
+		passReqToCallback: true,
+		includeEmail: true
 	  },
 	  function(req, token, tokenSecret, profile, done) {
 		process.nextTick(function(){
