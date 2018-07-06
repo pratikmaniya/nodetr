@@ -214,6 +214,7 @@ module.exports = function(passport) {
 							user.twitter.token = token;
 							user.twitter.name = profile.displayName,
 							user.twitter.email = profile.emails[0].value;
+							console.log(profile);
 							user.save(function(err){
 								if(err)
 									throw err;
