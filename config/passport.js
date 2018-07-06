@@ -204,6 +204,7 @@ module.exports = function(passport) {
 		includeEmail: true
 	  },
 	  function(req, token, tokenSecret, profile, done) {
+		console.log(profile)
 		process.nextTick(function(){
 			if(!req.user) {
 				User.findOne({'twitter.id' : profile.id}, function(err, user) {
@@ -214,7 +215,6 @@ module.exports = function(passport) {
 							user.twitter.token = token;
 							user.twitter.name = profile.displayName,
 							user.twitter.email = profile.emails[0].value;
-							console.log(profile);
 							user.save(function(err){
 								if(err)
 									throw err;
@@ -259,6 +259,7 @@ module.exports = function(passport) {
 		passReqToCallback: true
 	  },
 	  function(req, accessToken, refreshToken, profile, done) {
+		console.log(profile)
 		process.nextTick(function(){
 			if(!req.user) {
 				User.findOne({'github.id' : profile.id}, function(err, user) {
@@ -269,7 +270,7 @@ module.exports = function(passport) {
 							user.github.token = accessToken;
 							user.github.name = profile.displayName,
 							user.github.email = profile.emails[0].value;
-							console.log(profile);
+						
 							user.save(function(err){
 								if(err)
 									throw err;
