@@ -107,7 +107,7 @@ app.get('/profile', isLoggedIn, function(req, res){
     res.render('../views/profile.pug', {user: req.user});
 });
 
-app.get('/auth/google',passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.post('/auth/google',passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/auth/google/callback', passport.authenticate('google', { 
     successRedirect: '/users/profile',
