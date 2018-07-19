@@ -13,7 +13,7 @@ app.get('*', function(req, res, next) {
 
 app.get('/register', isNotLoggedIn, function(req, res) {
     res.render('register.pug');
-}); 
+});
 
 app.post('/register', function(req, res, next) {
     const name = req.body.name;
@@ -70,12 +70,12 @@ app.post('/register', function(req, res, next) {
                                         uuser.local.name = newUser.local.name;
                                         uuser.local.email = newUser.local.email;
                                         uuser.local.username = newUser.local.username;
-                                        uuser.local.password = newUser.local.password;    
+                                        uuser.local.password = newUser.local.password;
                                         uuser.save();
                                         req.flash('success', 'You are now registered and can login!');
                                         res.redirect('/users/login');
                                     }
-                                });            
+                                });
                             });
                         });
                     }
@@ -109,30 +109,30 @@ app.get('/profile', isLoggedIn, function(req, res){
 
 app.get('/auth/google',passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-app.get('/auth/google/callback', passport.authenticate('google', { 
+app.get('/auth/google/callback', passport.authenticate('google', {
     successRedirect: '/users/profile',
-    failureRedirect: '/register' 
+    failureRedirect: '/register'
 }));
 
 app.get('/auth/facebook',passport.authenticate('facebook', { scope: ['email'] }));
 
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { 
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
     successRedirect: '/users/profile',
-    failureRedirect: '/register' 
+    failureRedirect: '/register'
 }));
 
 app.get('/auth/twitter',passport.authenticate('twitter'));
 
-app.get('/auth/twitter/callback', passport.authenticate('twitter', { 
+app.get('/auth/twitter/callback', passport.authenticate('twitter', {
     successRedirect: '/users/profile',
-    failureRedirect: '/register' 
+    failureRedirect: '/register'
 }));
 
 app.get('/auth/github',passport.authenticate('github'));
 
-app.get('/auth/github/callback', passport.authenticate('github', { 
+app.get('/auth/github/callback', passport.authenticate('github', {
     successRedirect: '/users/profile',
-    failureRedirect: '/register' 
+    failureRedirect: '/register'
 }));
 
 app.get('/connect/facebook', isLoggedIn, passport.authorize('facebook', { scope: 'email' }));
@@ -144,7 +144,7 @@ app.get('/connect/local', isLoggedIn, isUnlinked, function(req, res){
     res.render('../views/connectLogin.pug');
 });
 
-app.get('/connect/local', passport.authenticate('local-signin', {
+app.post('/connect/local', passport.authenticate('local-signin', {
     successRedirect: '/users/profile',
     failureRedirect: '/users/connect/local',
     failureFlash: true
@@ -226,7 +226,7 @@ function isUnlinked(req, res, next) {
                     });
                 });
             }
-            
+
         });
     }
     else{
