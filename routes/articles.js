@@ -52,7 +52,7 @@ app.get('/:id', function(req, res) {
         User.findById(article.author, function(err, user) {
             res.render('article.pug', {
                 article:article,
-                author:user.local.name || user.google.name
+                author:user.local.name || user.google.name || user.github.name || user.facebook.name ||user.twitter.name
             });
         });
     });
