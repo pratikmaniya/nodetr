@@ -260,6 +260,7 @@ module.exports = function(passport) {
 	  },
 	  function(req, accessToken, refreshToken, profile, done) {
 		console.log(profile)
+		if(profile.emails){
 		process.nextTick(function(){
 			if(!req.user) {
 				User.findOne({'github.id' : profile.id}, function(err, user) {
@@ -283,12 +284,7 @@ module.exports = function(passport) {
 						newUser.github.id = profile.id,
 						newUser.github.token = accessToken,
 						newUser.github.name = profile.displayName || profile.username,
-						try{
-							newUser.github.email = profile.emails[0].value;
-						}
-						catch(error){
-							return done(null, 'you have not specified email on github');
-						}
+						newUser.github.email = profile.emails[0].value;
 						newUser.save(function(err){
 							if(err)
 								throw err;
@@ -312,6 +308,11 @@ module.exports = function(passport) {
 			}
 			
 		});
+		}
+		else{
+			console.log('email is not specified on github');
+			throw err;
+		}
 	  }
 	));
 
