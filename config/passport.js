@@ -283,8 +283,12 @@ module.exports = function(passport) {
 						newUser.github.id = profile.id,
 						newUser.github.token = accessToken,
 						newUser.github.name = profile.displayName || profile.username,
-						newUser.github.email = profile.emails[0].value || null;
-	
+						try(profile.emails){
+							newUser.github.email = profile.emails[0].value;
+						}
+						catch(error){
+							return done(null, 'you have not specified email on github');
+						}
 						newUser.save(function(err){
 							if(err)
 								throw err;
