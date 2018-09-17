@@ -261,58 +261,56 @@ module.exports = function(passport) {
 	  function(req, accessToken, refreshToken, profile, done) {
 		console.log(profile)
 		if(profile.emails){
-		process.nextTick(function(){
-			if(!req.user) {
-				User.findOne({'github.id' : profile.id}, function(err, user) {
-					if(err)
-						return done(err);
-					if(user){
-						if(!user.github.token){
-							user.github.token = accessToken;
-							user.github.name = profile.displayName,
-							user.github.email = profile.emails[0].value;
-						
-							user.save(function(err){
+			process.nextTick(function(){
+				if(!req.user) {
+					User.findOne({'github.id' : profile.id}, function(err, user) {
+						if(err)
+							return done(err);
+						if(user){
+							if(!user.github.token){
+								user.github.token = accessToken;
+								user.github.name = profile.displayName,
+								user.github.email = profile.emails[0].value;
+
+								user.save(function(err){
+									if(err)
+										throw err;
+								});
+							}
+							return done(null, user);
+						}
+						else{
+							var newUser = new User();
+							newUser.github.id = profile.id,
+							newUser.github.token = accessToken,
+							newUser.github.name = profile.displayName || profile.username,
+							newUser.github.email = profile.emails[0].value;
+							newUser.save(function(err){
 								if(err)
 									throw err;
+								return done(null, newUser);
 							});
 						}
-						return done(null, user);
-					}
-					else{
-						var newUser = new User();
-						newUser.github.id = profile.id,
-						newUser.github.token = accessToken,
-						newUser.github.name = profile.displayName || profile.username,
-						newUser.github.email = profile.emails[0].value;
-						newUser.save(function(err){
-							if(err)
-								throw err;
-							return done(null, newUser);
-						});
-					}
-				});
-			}
-			else{
-				var user = req.user;
-				user.github.id = profile.id,
-				user.github.token = accessToken,
-				user.github.name = profile.displayName,
-				user.github.email = profile.emails[0].value;
+					});
+				}
+				else{
+					var user = req.user;
+					user.github.id = profile.id,
+					user.github.token = accessToken,
+					user.github.name = profile.displayName,
+					user.github.email = profile.emails[0].value;
 
-				user.save(function(err){
-					if(err)
-						throw err;
-					return done(null, user);
-				});
-			}
-			
-		});
+					user.save(function(err){
+						if(err)
+							throw err;
+						return done(null, user);
+					});
+				}
+
+			});
 		}
 		else{
-			console.log('email is not specified on github');
-			return done(alert('Wrong password'));
-			//return('you have not specified email on github please update your github profile and try again or login with different method');
+			throw 'you have not specified email on github please update your github profile and try again or login with different method';
 		}
 	  }
 	));
