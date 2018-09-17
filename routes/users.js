@@ -128,7 +128,13 @@ app.get('/auth/twitter/callback', passport.authenticate('twitter', {
     failureRedirect: '/register'
 }));
 
-app.get('/auth/github',passport.authenticate('github'));
+app.get('/auth/github',passport.authenticate('github')){
+    if(errors){
+        res.render('register.pug', {
+            errors:errors
+    });
+    //failureRedirect: '/login'
+};
 
 app.get('/auth/github/callback', passport.authenticate('github', {
     successRedirect: '/users/profile',
