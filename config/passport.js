@@ -311,7 +311,8 @@ module.exports = function(passport) {
 		}
 		else{
 			console.log('email is not specified on github');
-			res.return('you have not specified email on github please update your github profile and try again or login with different method');
+			return alert('Wrong password');
+			//return('you have not specified email on github please update your github profile and try again or login with different method');
 		}
 	  }
 	));
