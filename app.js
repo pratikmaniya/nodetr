@@ -110,6 +110,10 @@ app.get('/style.css', function(req, res) {
     res.sendFile(path.join(__dirname, 'public', 'css', 'style.css'));
 });
 
+app.get('/favicon.ico', function(req, res) {
+    res.sendFile(path.join(__dirname, 'favicon.ico'));
+});
+
 let Counter = require('./models/counter');
 let counter=0;      
 
